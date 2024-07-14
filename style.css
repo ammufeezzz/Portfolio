@@ -1,0 +1,206 @@
+*{
+    padding: 0;
+    margin: 0;
+    font-family:  "Poppins", sans-serif;
+}
+body{
+    background:  #f0f2f5;
+}
+
+.container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    margin: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+}
+
+.text-content{
+    max-width: 50%;
+    padding:20px;
+    border-radius: 10px;
+    background: #f0f2f5;
+
+
+
+}
+
+.name{
+    font-size: 3rem;
+    margin-bottom: 10px;
+    color:#333;
+}
+
+.first{
+    max-width: 50%;
+    height: auto;
+    border-radius: 10px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.intro{
+    color: #666;
+    font-size: 1.5rem;
+}
+
+.about-me{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+}
+.about-me .title{
+    font-size: 1.5rem;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.about-me p{
+    margin: 20px;
+    text-align: center;
+    padding: 20px;
+    border-radius: 10px;
+    font-size: 1.5em;
+    background: #f0f2f5;
+}
+.skills{
+    display: flex;
+    justify-content:space-evenly;
+    padding: 20px;
+    margin: 20px;
+    flex-direction: column;
+}
+
+.skillset{
+    display: flex;
+    font-size: 1.5rem;
+    text-align: center;
+}
+.extra{
+    display: flex;
+
+    align-items: center;
+    justify-content: space-around;
+    margin: 20px;
+
+}
+.skill{
+    margin: 10px;
+    padding: 30px;
+    background:  #f0f2f5;
+    border-radius: 20px;
+}
+.get-in-touch{
+    display: flex;
+    flex-direction: column;
+    padding: 50px;
+}
+button{
+    height: auto;
+    font-size: 1.5rem;
+    background: gainsboro;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+footer{
+    background:darkgray;
+
+}
+
+.final{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    list-style: none;
+    padding: 20px;
+    margin-top: 20px;
+
+}
+
+@media (max-width: 1024px) {
+    .container {
+        flex-direction: column; /* Stack content vertically */
+        align-items: center;
+        text-align: center;
+    }
+    
+    .text-content, .first {
+        max-width: 100%; /* Full width on smaller screens */
+    }
+
+    .name {
+        font-size: 2.5rem; /* Adjust font size */
+    }
+
+    .intro {
+        font-size: 1.3rem; /* Adjust font size */
+    }
+
+    .about-me .title, .about-me p {
+        font-size: 1.3rem; /* Adjust font size */
+    }
+
+    .skillset, .skill {
+        font-size: 1.3rem; /* Adjust font size */
+    }
+
+    .get-in-touch {
+        padding: 20px; /* Adjust padding */
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+        margin: 10px;
+    }
+
+    .name {
+        font-size: 2rem; /* Further adjust font size */
+    }
+
+    .intro {
+        font-size: 1.2rem; /* Further adjust font size */
+    }
+
+    .about-me .title, .about-me p {
+        font-size: 1.2rem; /* Further adjust font size */
+    }
+
+    .skillset, .skill {
+        font-size: 1.2rem; /* Further adjust font size */
+    }
+
+    .get-in-touch {
+        padding: 10px; /* Further adjust padding */
+    }
+}
+
+@media (max-width: 480px) {
+    .name {
+        font-size: 1.8rem; /* Adjust font size for smaller screens */
+    }
+
+    .intro {
+        font-size: 1rem; /* Adjust font size for smaller screens */
+    }
+
+    .about-me .title, .about-me p {
+        font-size: 1rem; /* Adjust font size for smaller screens */
+    }
+
+    .skillset, .skill {
+        font-size: 1rem; /* Adjust font size for smaller screens */
+    }
+
+
+
+
+
+
+

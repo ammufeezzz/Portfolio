@@ -1,4 +1,5 @@
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
+import { useState } from 'react';
 import {
   ArrowDownRight,
   ArrowUpRight,
@@ -7,6 +8,9 @@ import {
   Mail,
   MapPin,
   Network,
+  Check,
+  ChevronRight,
+  LockKeyhole,
   Sparkles,
   Terminal,
 } from 'lucide-react';
@@ -149,9 +153,46 @@ function SectionHeading({ kicker, title, copy }) {
   );
 }
 
+const questSteps = [
+  { id: 'scan', number: '01', title: 'Scan the player', copy: 'A full-stack engineer building with data and AI.' },
+  { id: 'choose', number: '02', title: 'Pick a mission', copy: 'Explore a product made to solve a real problem.' },
+  { id: 'unlock', number: '03', title: 'Claim the key', copy: 'Unlock Ammar’s full quest log and contact channel.' },
+];
+
+function QuestGate({ onEnter }) {
+  const [completed, setCompleted] = useState([]);
+  const ready = completed.length === questSteps.length;
+  const toggleStep = (id) => setCompleted(current => current.includes(id) ? current : [...current, id]);
+
+  return <motion.section className="quest-gate" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, scale: 1.02 }} transition={{ duration: .45 }}>
+    <div className="quest-noise" aria-hidden="true" />
+    <div className="quest-gate-inner">
+      <motion.div className="quest-mark" initial={{ scale: .7, rotate: -12 }} animate={{ scale: 1, rotate: 0 }} transition={{ type: 'spring', stiffness: 180, damping: 14 }}><LockKeyhole size={30} /></motion.div>
+      <p className="quest-label">ACCESS PROTOCOL / 01</p>
+      <h1>Complete the<br /><em>mini quest.</em></h1>
+      <p className="quest-intro">A small detour before entering Ammar Mufeez’s portfolio. Tap each signal to collect your access key.</p>
+      <div className="quest-steps" role="list">
+        {questSteps.map((step, i) => {
+          const done = completed.includes(step.id);
+          return <motion.button type="button" role="listitem" className={`quest-step ${done ? 'done' : ''}`} onClick={() => toggleStep(step.id)} key={step.id} whileTap={{ scale: .98 }}>
+            <span className="quest-step-number">{done ? <Check size={16} /> : step.number}</span>
+            <span><strong>{step.title}</strong><small>{step.copy}</small></span>
+            <ChevronRight size={18} aria-hidden="true" />
+          </motion.button>;
+        })}
+      </div>
+      <div className="quest-progress"><span>QUEST PROGRESS</span><div><i style={{ width: `${(completed.length / questSteps.length) * 100}%` }} /></div><b>{completed.length}/{questSteps.length}</b></div>
+      <button type="button" className="quest-enter" disabled={!ready} onClick={onEnter}>{ready ? <>Unlock portfolio <ChevronRight size={18} /></> : <>Collect all signals <LockKeyhole size={16} /></>}</button>
+      <button type="button" className="quest-skip" onClick={onEnter}>Skip intro</button>
+    </div>
+  </motion.section>;
+}
+
 function App() {
+  const [entered, setEntered] = useState(false);
   return (
     <main>
+      <AnimatePresence>{!entered && <QuestGate onEnter={() => setEntered(true)} />}</AnimatePresence>
       <div className="scanline" aria-hidden="true" />
       <nav className="nav wrap">
         <a className="brand" href="#top" aria-label="Ammar Mufeez home">AM<span>.</span></a>

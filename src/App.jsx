@@ -133,10 +133,10 @@ const achievements = [
   ['#05', 'Hack the Thread', 'Pan-India solo hackathon · 180DC NITK'],
 ];
 
-const systemNodes = [
-  { id: 'build', label: 'BUILD', detail: 'Full-stack products with a clear job to do.', destination: '#projects', position: 'build' },
-  { id: 'data', label: 'DATA', detail: 'Pipelines and systems that turn information into action.', destination: '#work', position: 'data' },
-  { id: 'ai', label: 'AI', detail: 'Agentic and retrieval-powered tools grounded in real use cases.', destination: '#projects', position: 'ai' },
+const focusAreas = [
+  { id: 'systems', label: 'Systems', detail: 'Turning ambiguous problems into reliable, useful products.', destination: '#projects' },
+  { id: 'data', label: 'Data & AI', detail: 'Building agentic workflows, retrieval systems, and data-driven tools.', destination: '#work' },
+  { id: 'product', label: 'Product', detail: 'Designing interfaces that make technically complex work feel simple.', destination: '#projects' },
 ];
 
 const reveal = {
@@ -157,7 +157,7 @@ function SectionHeading({ kicker, title, copy }) {
 }
 
 function App() {
-  const [activeNode, setActiveNode] = useState(systemNodes[0]);
+  const [activeFocus, setActiveFocus] = useState(focusAreas[0]);
   return (
     <main>
       <div className="scanline" aria-hidden="true" />
@@ -179,19 +179,23 @@ function App() {
           <p className="hero-kicker">HELLO, I’M</p>
           <h1>Ammar<br /><em>Mufeez.</em></h1>
           <p className="hero-intro">I build useful digital systems at the intersection of <strong>full-stack engineering, data,</strong> and <strong>AI.</strong></p>
+          <div className="focus-switcher" aria-label="Explore Ammar's work by focus area">
+            <div className="focus-tabs">{focusAreas.map(area => <button type="button" className={activeFocus.id === area.id ? 'active' : ''} onClick={() => setActiveFocus(area)} key={area.id}>{area.label}</button>)}</div>
+            <motion.a className="focus-detail" href={activeFocus.destination} key={activeFocus.id} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .22 }}><span>CURRENT FOCUS</span><p>{activeFocus.detail}</p><ArrowDownRight size={17} /></motion.a>
+          </div>
           <div className="hero-actions">
             <a className="button button-primary" href="#projects">Explore my work <ArrowDownRight size={18} /></a>
             <a className="button button-quiet" href={github} target="_blank" rel="noreferrer"><Terminal size={17} /> GitHub</a>
           </div>
         </motion.div>
-        <motion.aside {...reveal} transition={{ ...reveal.transition, delay: 0.15 }} className="system-map">
-          <div className="system-map-top"><span>SYSTEMS LAB</span><span className="online">LIVE</span></div>
-          <div className="map-canvas" aria-label="Explore Ammar's areas of work">
-            <svg viewBox="0 0 320 210" aria-hidden="true"><path d="M70 58 L160 126 L250 58 M160 126 L160 185" /><circle cx="160" cy="126" r="4" /></svg>
-            {systemNodes.map(node => <motion.button type="button" className={`map-node ${node.position} ${activeNode.id === node.id ? 'active' : ''}`} key={node.id} onClick={() => setActiveNode(node)} whileTap={{ scale: .94 }}><i /><span>{node.label}</span></motion.button>)}
+        <motion.aside {...reveal} transition={{ ...reveal.transition, delay: 0.15 }} className="player-card">
+          <div className="player-top"><span>PLAYER PROFILE</span><span className="online">ONLINE</span></div>
+          <div className="player-grid">
+            <div className="monogram">AM</div>
+            <div><span className="player-label">ROLE</span><strong>SDE · DATA · AI</strong><span className="player-label">BASE</span><p><MapPin size={13} /> NITK Surathkal, India</p></div>
           </div>
-          <motion.a className="map-detail" href={activeNode.destination} key={activeNode.id} initial={{ opacity: 0, y: 7 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .22 }}><span>ACTIVE SIGNAL / {activeNode.label}</span><p>{activeNode.detail}</p><ArrowDownRight size={17} /></motion.a>
-          <div className="system-map-footer"><span><MapPin size={13} /> NITK Surathkal, India</span><span>SELECT A NODE</span></div>
+          <div className="player-stat"><span>LEVEL</span><b>04</b><div><i /></div></div>
+          <div className="player-footer"><span>BUILDING IN PUBLIC</span><Code2 size={16} /></div>
         </motion.aside>
       </section>
 

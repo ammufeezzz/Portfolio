@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   ArrowDownRight,
   ArrowUpRight,
@@ -8,6 +8,8 @@ import {
   Mail,
   MapPin,
   Music2,
+  Pause,
+  Play,
   Network,
   Leaf,
   Sparkles,
@@ -160,6 +162,60 @@ function SectionHeading({ kicker, title, copy }) {
 
 function App() {
   const [activeFocus, setActiveFocus] = useState(focusAreas[0]);
+  const [isLoFiPlaying, setIsLoFiPlaying] = useState(false);
+  const loFiRef = useRef(null);
+
+  useEffect(() => () => {
+    loFiRef.current?.context?.close();
+  }, []);
+
+  const toggleLoFi = () => {
+    if (loFiRef.current) {
+      const { context } = loFiRef.current;
+      if (context.state === 'running') {
+        context.suspend();
+        setIsLoFiPlaying(false);
+      } else {
+        context.resume();
+        setIsLoFiPlaying(true);
+      }
+      return;
+    }
+
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    const context = new AudioContext();
+    const master = context.createGain();
+    master.gain.value = 0.055;
+    master.connect(context.destination);
+
+    // Soft suspended chord: deliberately sparse, warm, and unobtrusive.
+    [146.83, 174.61, 220, 261.63].forEach((frequency, index) => {
+      const oscillator = context.createOscillator();
+      const gain = context.createGain();
+      oscillator.type = index % 2 ? 'sine' : 'triangle';
+      oscillator.frequency.value = frequency;
+      gain.gain.value = index === 0 ? 0.28 : 0.14;
+      oscillator.connect(gain).connect(master);
+      oscillator.start();
+    });
+
+    // A very quiet filtered noise layer gives it a gentle vinyl-like texture.
+    const noise = context.createBuffer(1, context.sampleRate * 2, context.sampleRate);
+    const noiseData = noise.getChannelData(0);
+    for (let i = 0; i < noiseData.length; i += 1) noiseData[i] = (Math.random() * 2 - 1) * 0.09;
+    const noiseSource = context.createBufferSource();
+    const filter = context.createBiquadFilter();
+    const noiseGain = context.createGain();
+    filter.type = 'lowpass'; filter.frequency.value = 520;
+    noiseGain.gain.value = 0.09;
+    noiseSource.buffer = noise; noiseSource.loop = true;
+    noiseSource.connect(filter).connect(noiseGain).connect(master);
+    noiseSource.start();
+
+    loFiRef.current = { context };
+    setIsLoFiPlaying(true);
+  };
+
   return (
     <main>
       <div className="scanline" aria-hidden="true" />
@@ -170,6 +226,9 @@ function App() {
           <a href="#projects">Projects</a>
           <a href="#contact">Contact</a>
         </div>
+        <button type="button" className={`sound-toggle ${isLoFiPlaying ? 'playing' : ''}`} onClick={toggleLoFi} aria-pressed={isLoFiPlaying}>
+          {isLoFiPlaying ? <Pause size={13} fill="currentColor" /> : <Play size={13} fill="currentColor" />} {isLoFiPlaying ? 'Pause sounds' : 'Lo-fi sounds'}
+        </button>
         <a className="nav-resume" href="/Ammar_Mufeez_Resume.pdf" download>
           Resume <Download size={14} />
         </a>

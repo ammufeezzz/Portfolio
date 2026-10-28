@@ -7,7 +7,9 @@ import {
   Download,
   Mail,
   MapPin,
+  Music2,
   Network,
+  Leaf,
   Sparkles,
   Terminal,
 } from 'lucide-react';
@@ -176,7 +178,7 @@ function App() {
       <section id="top" className="hero wrap">
         <motion.div {...reveal} className="hero-copy">
           <div className="availability"><span /> Available for opportunities</div>
-          <p className="hero-kicker">HELLO, I’M</p>
+          <p className="hero-kicker">HELLO, I’M · MAKING THINGS GROW</p>
           <h1>Ammar<br /><em>Mufeez.</em></h1>
           <p className="hero-intro">I build useful digital systems at the intersection of <strong>full-stack engineering, data,</strong> and <strong>AI.</strong></p>
           <div className="focus-switcher" aria-label="Explore Ammar's work by focus area">
@@ -188,23 +190,21 @@ function App() {
             <a className="button button-quiet" href={github} target="_blank" rel="noreferrer"><Terminal size={17} /> GitHub</a>
           </div>
         </motion.div>
-        <motion.aside {...reveal} transition={{ ...reveal.transition, delay: 0.15 }} className="player-card">
-          <div className="player-top"><span>PLAYER PROFILE</span><span className="online">ONLINE</span></div>
-          <div className="player-grid">
-            <div className="monogram">AM</div>
-            <div><span className="player-label">ROLE</span><strong>SDE · DATA · AI</strong><span className="player-label">BASE</span><p><MapPin size={13} /> NITK Surathkal, India</p></div>
-          </div>
-          <div className="player-stat"><span>LEVEL</span><b>04</b><div><i /></div></div>
-          <div className="player-footer"><span>BUILDING IN PUBLIC</span><Code2 size={16} /></div>
+        <motion.aside {...reveal} transition={{ ...reveal.transition, delay: 0.15 }} className="garden-card" aria-label="A peaceful garden inspired creative profile">
+          <div className="garden-sun" /><div className="garden-orb orb-one" /><div className="garden-orb orb-two" />
+          <div className="garden-lines"><i /><i /><i /><i /></div>
+          <div className="garden-copy"><span><Music2 size={15} /> IN A GENTLE RHYTHM</span><strong>Code that feels<br />good to use.</strong><p><MapPin size={13} /> NITK Surathkal, India</p></div>
+          <div className="garden-stem stem-one"><i /><b /></div><div className="garden-stem stem-two"><i /><b /></div><div className="garden-stem stem-three"><i /><b /></div>
+          <div className="garden-footer"><span><Leaf size={15} /> HUMAN-CENTRED BUILDING</span><span>2026</span></div>
         </motion.aside>
       </section>
 
       <section className="ticker" aria-label="Areas of expertise">
-        <div><span>FULL STACK</span><b>✦</b><span>DATA ENGINEERING</span><b>✦</b><span>AI SYSTEMS</span><b>✦</b><span>PROBLEM SOLVING</span></div>
+        <div><span>FULL STACK</span><b>✿</b><span>DATA ENGINEERING</span><b>♫</b><span>AI SYSTEMS</span><b>✿</b><span>THOUGHTFUL PRODUCTS</span></div>
       </section>
 
       <section id="about" className="about wrap section">
-        <SectionHeading kicker="01 / THE PLAYER" title="Building systems that do more." />
+        <SectionHeading kicker="01 / ROOTS & RHYTHM" title="Building systems that do more." />
         <motion.div {...reveal} className="about-grid">
           <p className="about-lead">I’m a fourth-year undergraduate at <strong>NITK Surathkal</strong>, studying Civil Engineering with a Minor in Management — and spending my time building with code.</p>
           <div className="about-body"><p>My work spans agentic AI, data pipelines, interfaces, and full-stack products. I’m most interested in taking an ambiguous problem and shaping it into a thoughtful, useful experience.</p><p>Outside the build, I mentor juniors and help run technical events as an Executive Member of IE NITK.</p></div>
@@ -212,14 +212,14 @@ function App() {
       </section>
 
       <section className="skills section wrap">
-        <SectionHeading kicker="02 / SKILL TREE" title="Tools I reach for." copy="A versatile stack, selected for building practical products end to end." />
+        <SectionHeading kicker="02 / THE TOOL GARDEN" title="Tools I reach for." copy="A versatile stack, selected for building practical products end to end." />
         <div className="skills-grid">
           {skills.map((skill, i) => <motion.article {...reveal} transition={{ ...reveal.transition, delay: i * 0.04 }} className="skill-card" key={skill.label}><span className="skill-number">0{i + 1}</span><h3>{skill.label}</h3><div>{skill.values.map(value => { const Icon = techIcons[value] || Code2; return <span key={value}><Icon aria-hidden="true" />{value}</span>; })}</div></motion.article>)}
         </div>
       </section>
 
       <section id="work" className="experience section wrap">
-        <SectionHeading kicker="03 / QUEST LOG" title="Experience earned." />
+        <SectionHeading kicker="03 / THE PATH SO FAR" title="Experience earned." />
         <div className="timeline">
           {experiences.map((item, i) => <motion.article {...reveal} transition={{ ...reveal.transition, delay: i * 0.08 }} className="experience-card" key={item.company}>
             <div className="experience-meta"><span>{item.date}</span><b>0{i + 1}</b></div>
@@ -230,7 +230,7 @@ function App() {
       </section>
 
       <section id="projects" className="projects section wrap">
-        <SectionHeading kicker="04 / FEATURED BUILDS" title="Selected missions." copy="Products that combine engineering depth with a clear user need." />
+        <SectionHeading kicker="04 / FEATURED BUILDS" title="Selected creations." copy="Products that combine engineering depth with a clear user need." />
         <div className="project-list">
           {projects.map((project, i) => <motion.article {...reveal} transition={{ ...reveal.transition, delay: i * 0.06 }} className={`project-card ${project.featured ? 'featured' : ''}`} key={project.title}>
             <div className="project-index">{project.index}</div>
@@ -241,7 +241,7 @@ function App() {
       </section>
 
       <section className="achievements section wrap">
-        <SectionHeading kicker="05 / ACHIEVEMENTS UNLOCKED" title="Proof of play." />
+        <SectionHeading kicker="05 / MILESTONES" title="Little celebrations." />
         <div className="achievement-grid">{achievements.map(([rank, title, detail], i) => <motion.article {...reveal} transition={{ ...reveal.transition, delay: i * 0.07 }} key={title}><b>{rank}</b><h3>{title}</h3><p>{detail}</p></motion.article>)}</div>
       </section>
 

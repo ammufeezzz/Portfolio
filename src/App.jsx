@@ -219,6 +219,11 @@ function App() {
   return (
     <main>
       <div className="scanline" aria-hidden="true" />
+      <div className="ambient-garden" aria-hidden="true">
+        <i className="ambient-leaf leaf-a" /><i className="ambient-leaf leaf-b" /><i className="ambient-leaf leaf-c" /><i className="ambient-leaf leaf-d" />
+        <i className="ambient-flower flower-a" /><i className="ambient-flower flower-b" />
+        <i className="ambient-branch branch-a" /><i className="ambient-branch branch-b" />
+      </div>
       <nav className="nav wrap">
         <a className="brand" href="#top" aria-label="Ammar Mufeez home">AM<span>.</span></a>
         <div className="nav-links">

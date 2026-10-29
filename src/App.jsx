@@ -166,6 +166,7 @@ function App() {
   const loFiRef = useRef(null);
 
   useEffect(() => () => {
+    loFiRef.current?.timers?.forEach(clearInterval);
     loFiRef.current?.context?.close();
   }, []);
 
@@ -185,21 +186,39 @@ function App() {
     const AudioContext = window.AudioContext || window.webkitAudioContext;
     const context = new AudioContext();
     const master = context.createGain();
-    master.gain.value = 0.055;
+    master.gain.value = 0.13;
     master.connect(context.destination);
 
-    // Soft suspended chord: deliberately sparse, warm, and unobtrusive.
-    [146.83, 174.61, 220, 261.63].forEach((frequency, index) => {
+    const playTone = (frequency, start, duration, volume, type = 'triangle') => {
       const oscillator = context.createOscillator();
       const gain = context.createGain();
-      oscillator.type = index % 2 ? 'sine' : 'triangle';
-      oscillator.frequency.value = frequency;
-      gain.gain.value = index === 0 ? 0.28 : 0.14;
+      oscillator.type = type;
+      oscillator.frequency.setValueAtTime(frequency, start);
+      gain.gain.setValueAtTime(0.0001, start);
+      gain.gain.exponentialRampToValueAtTime(volume, start + 0.015);
+      gain.gain.exponentialRampToValueAtTime(0.0001, start + duration);
       oscillator.connect(gain).connect(master);
-      oscillator.start();
-    });
+      oscillator.start(start);
+      oscillator.stop(start + duration + 0.03);
+    };
 
-    // A very quiet filtered noise layer gives it a gentle vinyl-like texture.
+    // A sunny, low-key 88 BPM loop: warm chords, soft kick, hat and a tiny melody.
+    const chords = [[261.63, 329.63, 392], [293.66, 369.99, 440], [220, 277.18, 329.63], [246.94, 311.13, 369.99]];
+    const melody = [659.25, 587.33, 523.25, 587.33, 739.99, 659.25, 587.33, 523.25];
+    let step = 0;
+    const playBeat = () => {
+      const now = context.currentTime + 0.02;
+      const chord = chords[Math.floor(step / 8) % chords.length];
+      if (step % 8 === 0) chord.forEach((note, index) => playTone(note, now, 1.45, index === 0 ? 0.08 : 0.045, 'sine'));
+      if (step % 2 === 0) playTone(92, now, 0.16, 0.22, 'sine');
+      playTone(step % 2 ? 5400 : 3900, now, 0.028, 0.018, 'square');
+      if (step % 2 === 1) playTone(melody[step % melody.length], now, 0.23, 0.065);
+      step = (step + 1) % 32;
+    };
+    playBeat();
+    const beatTimer = window.setInterval(playBeat, 340);
+
+    // A quiet vinyl texture keeps the loop from feeling too pristine.
     const noise = context.createBuffer(1, context.sampleRate * 2, context.sampleRate);
     const noiseData = noise.getChannelData(0);
     for (let i = 0; i < noiseData.length; i += 1) noiseData[i] = (Math.random() * 2 - 1) * 0.09;
@@ -207,12 +226,21 @@ function App() {
     const filter = context.createBiquadFilter();
     const noiseGain = context.createGain();
     filter.type = 'lowpass'; filter.frequency.value = 520;
-    noiseGain.gain.value = 0.09;
+    noiseGain.gain.value = 0.035;
     noiseSource.buffer = noise; noiseSource.loop = true;
     noiseSource.connect(filter).connect(noiseGain).connect(master);
     noiseSource.start();
 
-    loFiRef.current = { context };
+    // Occasional two-note chirps add some outdoor life without making the page noisy.
+    const chirp = () => {
+      const now = context.currentTime + 0.03;
+      const base = 1450 + Math.random() * 380;
+      playTone(base, now, 0.07, 0.025, 'sine');
+      playTone(base * 1.18, now + 0.11, 0.1, 0.02, 'sine');
+    };
+    const birdTimer = window.setInterval(chirp, 6500);
+
+    loFiRef.current = { context, timers: [beatTimer, birdTimer] };
     setIsLoFiPlaying(true);
   };
 
@@ -220,6 +248,8 @@ function App() {
     <main>
       <div className="scanline" aria-hidden="true" />
       <div className="ambient-garden" aria-hidden="true">
+        <div className="ambient-cloud cloud-a"><i /><i /><i /></div><div className="ambient-cloud cloud-b"><i /><i /><i /></div><div className="ambient-cloud cloud-c"><i /><i /><i /></div>
+        <div className="ambient-bird bird-a"><i /><i /></div><div className="ambient-bird bird-b"><i /><i /></div><div className="ambient-bird bird-c"><i /><i /></div>
         <i className="ambient-leaf leaf-a" /><i className="ambient-leaf leaf-b" /><i className="ambient-leaf leaf-c" /><i className="ambient-leaf leaf-d" />
         <i className="ambient-flower flower-a" /><i className="ambient-flower flower-b" />
         <i className="ambient-branch branch-a" /><i className="ambient-branch branch-b" />
